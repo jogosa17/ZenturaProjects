@@ -11,13 +11,13 @@ CREATE TABLE IF NOT EXISTS files (
     consulta_id INT NULL,
     uploaded_by INT NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
-    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
-    FOREIGN KEY (consulta_id) REFERENCES consultas(id) ON DELETE CASCADE,
-    FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_files_project (project_id),
     INDEX idx_files_task (task_id),
     INDEX idx_files_consulta (consulta_id),
     INDEX idx_files_uploaded_by (uploaded_by),
-    INDEX idx_files_filename (filename)
+    INDEX idx_files_filename (filename),
+    FOREIGN KEY (project_id) REFERENCES projects(id) ON DELETE CASCADE,
+    FOREIGN KEY (task_id) REFERENCES tasks(id) ON DELETE CASCADE,
+    FOREIGN KEY (consulta_id) REFERENCES consultas(id) ON DELETE CASCADE,
+    FOREIGN KEY (uploaded_by) REFERENCES users(id) ON DELETE CASCADE
 );

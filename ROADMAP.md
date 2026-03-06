@@ -42,14 +42,14 @@ Cada tarea puede marcarse como completada usando los **checkboxes**.
 
 # Fase 3 — Sistema de autenticación
 
-* [ ] Implementar login
-* [ ] Implementar hash de contraseñas
-* [ ] Implementar JWT
-* [ ] Crear middleware de autenticación
-* [ ] Crear middleware de roles
-* [ ] Crear endpoint de login
-* [ ] Crear endpoint de validación de token
-* [ ] Crear pantalla de login en frontend
+* [x] Implementar login
+* [x] Implementar hash de contraseñas
+* [x] Implementar JWT
+* [x] Crear middleware de autenticación
+* [x] Crear middleware de roles
+* [x] Crear endpoint de login
+* [x] Crear endpoint de validación de token
+* [x] Crear pantalla de login en frontend
 
 ---
 
