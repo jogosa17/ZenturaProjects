@@ -4,7 +4,16 @@ const path = require('path');
 require('dotenv').config();
 
 // Importar rutas
-const authRoutes = require('./routes/auth');
+const authRoutes = require('./routes/auth.routes');
+const userRoutes = require('./routes/users.routes');
+const clientRoutes = require('./routes/clients.routes');
+const projectRoutes = require('./routes/projects.routes');
+const zoneRoutes = require('./routes/zones.routes');
+const taskRoutes = require('./routes/tasks.routes');
+const fileRoutes = require('./routes/files.routes');
+const noteRoutes = require('./routes/notes.routes');
+const consultaRoutes = require('./routes/consultas.routes');
+const notificationRoutes = require('./routes/notifications.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -15,10 +24,20 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Servir archivos estáticos (uploads)
+// Asegura que la ruta coincida con lo que guardamos en BD (/uploads/filename)
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // Rutas
+app.use('/api/users', userRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/clients', clientRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/zones', zoneRoutes);
+app.use('/api/tasks', taskRoutes);
+app.use('/api/files', fileRoutes);
+app.use('/api/notes', noteRoutes);
+app.use('/api/consultas', consultaRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {

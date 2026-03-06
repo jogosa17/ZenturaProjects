@@ -8,7 +8,6 @@ users (administrativos, trabajadores)
 │   └── projects
 │       ├── zones
 │       │   └── tasks
-│       │       └── task_notes
 │       ├── files
 │       ├── consultas
 │       │   └── consultas_replies
@@ -77,17 +76,11 @@ users (administrativos, trabajadores)
 - zone_id (FK)
 - project_id (FK)
 - created_at
-- updated_at
-
-### 7. task_notes
-- id (PK)
-- task_id (FK)
-- user_id (FK)
-- content
-- created_at
-
+-  kTEXT
+- creaatd_ad_at
+upd
 ### 8. files
-- id (PK)
+- id7(PK)
 - filename
 - original_name
 - file_path

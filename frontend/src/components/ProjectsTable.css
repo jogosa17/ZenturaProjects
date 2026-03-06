@@ -1,0 +1,142 @@
+.projects-table-container {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin-top: 20px;
+  overflow-x: auto; /* Para permitir scroll horizontal en móviles */
+}
+
+.projects-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px; /* Asegura un ancho mínimo */
+}
+
+.projects-table th,
+.projects-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+  vertical-align: middle;
+}
+
+.projects-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #333;
+}
+
+.projects-table tbody tr:hover {
+  background-color: #f5f7fa;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.actions-cell {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-view,
+.btn-edit,
+.btn-delete {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s;
+}
+
+.btn-view {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-view:hover {
+  background-color: #1976d2;
+}
+
+.btn-edit {
+  background-color: #ff9800;
+  color: white;
+}
+
+.btn-edit:hover {
+  background-color: #f57c00;
+}
+
+.btn-delete {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #d32f2f;
+}
+
+.badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+/* Status Badges */
+.status-started { background-color: #e3f2fd; color: #1565c0; }
+.status-cancelled { background-color: #ffebee; color: #c62828; }
+.status-accepted { background-color: #fff3e0; color: #ef6c00; }
+.status-finished { background-color: #e8f5e9; color: #2e7d32; }
+.status-paid { background-color: #f3e5f5; color: #7b1fa2; }
+
+/* Priority Badges */
+.priority-urgent { background-color: #ffcdd2; color: #b71c1c; }
+.priority-high { background-color: #fff9c4; color: #f57f17; }
+.priority-low { background-color: #f1f8e9; color: #33691e; }
+
+.loading-container {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.project-name-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.project-name-cell.clickable {
+  cursor: pointer;
+}
+
+.project-name-cell.clickable:hover .project-name {
+  color: #2196f3;
+  text-decoration: underline;
+}
+
+.project-name {
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+.urgent-badge {
+  background-color: #d32f2f;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+}
+
+.dates-cell {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+  color: #666;
+}

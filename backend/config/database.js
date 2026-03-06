@@ -1,5 +1,7 @@
 const mysql = require('mysql2/promise');
-require('dotenv').config();
+const path = require('path');
+// Cargar .env desde la raíz del backend (un nivel arriba de config)
+require('dotenv').config({ path: path.join(__dirname, '../.env') });
 
 // Configuración de la base de datos
 const dbConfig = {

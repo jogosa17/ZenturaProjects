@@ -55,129 +55,129 @@ Cada tarea puede marcarse como completada usando los **checkboxes**.
 
 # Fase 4 — Gestión de usuarios
 
-* [ ] Endpoint para crear trabajadores
-* [ ] Endpoint para crear administradores
-* [ ] Endpoint para editar usuarios
-* [ ] Endpoint para activar o desactivar usuarios
-* [ ] Endpoint para listar trabajadores
-* [ ] Crear vista de tabla de trabajadores
-* [ ] Mostrar ID
-* [ ] Mostrar nombre
-* [ ] Mostrar estado
-* [ ] Mostrar proyectos asociados
+* [x] Endpoint para crear trabajadores
+* [x] Endpoint para crear administradores
+* [x] Endpoint para editar usuarios
+* [x] Endpoint para activar o desactivar usuarios
+* [x] Endpoint para listar trabajadores
+* [x] Crear vista de tabla de trabajadores
+* [x] Mostrar ID
+* [x] Mostrar nombre
+* [x] Mostrar estado
+* [x] Mostrar proyectos asociados
 
 ---
 
 # Fase 5 — Gestión de clientes
 
-* [ ] Endpoint para crear cliente
-* [ ] Endpoint para editar cliente
-* [ ] Endpoint para listar clientes
-* [ ] Endpoint para ver proyectos de un cliente
-* [ ] Crear vista de clientes
-* [ ] Añadir botón de llamada
+* [x] Endpoint para crear cliente
+* [x] Endpoint para editar cliente
+* [x] Endpoint para listar clientes
+* [x] Endpoint para ver proyectos de un cliente
+* [x] Crear vista de clientes
+* [x] Añadir botón de llamada
 
 ---
 
 # Fase 6 — Gestión de proyectos
 
-* [ ] Endpoint para crear proyecto
-* [ ] Endpoint para editar proyecto
-* [ ] Endpoint para eliminar proyecto
-* [ ] Endpoint para listar proyectos
-* [ ] Asignar trabajadores a proyecto
-* [ ] Definir prioridad del proyecto
-* [ ] Definir estado del proyecto
-* [ ] Configurar fechas de inicio y fin
-* [ ] Crear vista de proyectos
-* [ ] Crear vista de detalle de proyecto
+* [x] Endpoint para crear proyecto
+* [x] Endpoint para editar proyecto
+* [x] Endpoint para eliminar proyecto
+* [x] Endpoint para listar proyectos
+* [x] Asignar trabajadores a proyecto (Backend implementado)
+* [x] Definir prioridad del proyecto
+* [x] Definir estado del proyecto
+* [x] Configurar fechas de inicio y fin
+* [x] Crear vista de proyectos
+* [x] Crear vista de detalle de proyecto
 
 ---
 
 # Fase 7 — Sistema de zonas
 
-* [ ] Endpoint para crear zonas
-* [ ] Endpoint para editar zonas
-* [ ] Endpoint para eliminar zonas
-* [ ] Endpoint para listar zonas por proyecto
-* [ ] Crear interfaz de gestión de zonas
+* [x] Endpoint para crear zonas
+* [x] Endpoint para editar zonas
+* [x] Endpoint para eliminar zonas
+* [x] Endpoint para listar zonas por proyecto
+* [x] Crear interfaz de gestión de zonas
 
 ---
 
 # Fase 8 — Sistema de tareas
 
-* [ ] Endpoint para crear tareas
-* [ ] Endpoint para editar tareas
-* [ ] Endpoint para eliminar tareas
-* [ ] Endpoint para listar tareas por zona
-* [ ] Cambiar estado de tarea
-* [ ] Cambiar prioridad de tarea
-* [ ] Añadir precio a tareas
-* [ ] Crear interfaz de tareas
+* [x] Endpoint para crear tareas
+* [x] Endpoint para editar tareas
+* [x] Endpoint para eliminar tareas
+* [x] Endpoint para listar tareas por zona
+* [x] Cambiar estado de tarea
+* [x] Cambiar prioridad de tarea
+* [x] Añadir precio a tareas
+* [x] Crear interfaz de tareas
 
 ---
 
 # Fase 9 — Cálculo dinámico del presupuesto
 
-* [ ] Sumar precios de tareas
-* [ ] Calcular presupuesto total del proyecto
-* [ ] Actualizar presupuesto automáticamente
-* [ ] Mostrar presupuesto en la vista del proyecto
+* [x] Sumar precios de tareas
+* [x] Calcular presupuesto total del proyecto
+* [x] Actualizar presupuesto automáticamente
+* [x] Mostrar presupuesto en la vista del proyecto
 
 ---
 
 # Fase 10 — Sistema de archivos
 
-* [ ] Endpoint para subir archivos a proyectos
-* [ ] Endpoint para subir archivos a tareas
-* [ ] Endpoint para subir archivos a consultas
-* [ ] Guardar archivos en servidor
-* [ ] Crear sistema de etiquetas
-* [ ] Implementar autocompletado de etiquetas
-* [ ] Crear vista de archivos
+* [x] Endpoint para subir archivos a proyectos
+* [x] Endpoint para subir archivos a tareas
+* [x] Endpoint para subir archivos a consultas
+* [x] Guardar archivos en servidor
+* [x] Crear sistema de etiquetas
+* [x] Implementar autocompletado de etiquetas
+* [x] Crear vista de archivos
 
 ---
 
 # Fase 11 — Presupuesto y factura
 
-* [ ] Endpoint para subir presupuesto
-* [ ] Endpoint para descargar presupuesto
-* [ ] Endpoint para subir factura
-* [ ] Endpoint para descargar factura
-* [ ] Crear botones en interfaz de proyecto
+* [x] Endpoint para subir presupuesto
+* [x] Endpoint para descargar presupuesto (Vía URL directa)
+* [x] Endpoint para subir factura
+* [x] Endpoint para descargar factura (Vía URL directa)
+* [x] Crear botones en interfaz de proyecto
 
 ---
 
 # Fase 12 — Notas de tareas
 
-* [ ] Endpoint para crear notas
-* [ ] Endpoint para listar notas
-* [ ] Permitir subir archivos en notas
-* [ ] Crear historial de actividad de tareas
-* [ ] Crear interfaz de notas
+* [x] Endpoint para crear notas
+* [x] Endpoint para listar notas
+* [x] Permitir subir archivos en notas (Backend preparado con migración 19)
+* [x] Crear historial de actividad de tareas (Tabla task_notes sirve para esto)
+* [x] Crear interfaz de notas
 
 ---
 
 # Fase 13 — Chat del proyecto (Consultas)
 
-* [ ] Endpoint para enviar mensajes
-* [ ] Endpoint para listar mensajes
-* [ ] Endpoint para responder mensajes
-* [ ] Permitir subir archivos en chat
-* [ ] Crear interfaz de chat
+* [x] Endpoint para enviar mensajes
+* [x] Endpoint para listar mensajes
+* [x] Endpoint para responder mensajes
+* [x] Permitir subir archivos en chat (Backend preparado)
+* [x] Crear interfaz de chat
 
 ---
 
 # Fase 14 — Sistema de notificaciones
 
-* [ ] Crear sistema de notificaciones
-* [ ] Notificación al crear tarea
-* [ ] Notificación al actualizar tarea
-* [ ] Notificación al finalizar tarea
-* [ ] Notificación al subir archivos
-* [ ] Notificación en chat
-* [ ] Notificaciones de fechas de proyecto
-* [ ] Crear panel de notificaciones
+* [x] Crear sistema de notificaciones
+* [x] Notificación al crear tarea
+* [x] Notificación al actualizar tarea
+* [x] Notificación al finalizar tarea
+* [x] Notificación al subir archivos
+* [x] Notificación en chat
+* [ ] Notificaciones de fechas de proyecto (Requiere cron job o check periódico)
+* [x] Crear panel de notificaciones
 
 ---
 
