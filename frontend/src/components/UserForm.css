@@ -58,8 +58,21 @@
 .form-group input[readonly],
 .form-group select:disabled {
   background-color: #f5f5f5;
+  color: #666;
   cursor: not-allowed;
-  color: #999;
+}
+
+.readonly-input {
+  background-color: #f8f9fa;
+  color: #495057;
+  border: 1px solid #ced4da;
+  cursor: not-allowed;
+}
+
+.readonly-input:focus {
+  outline: none;
+  border-color: #ced4da;
+  box-shadow: none;
 }
 
 .input-with-button {

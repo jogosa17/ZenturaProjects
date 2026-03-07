@@ -38,12 +38,12 @@
 
 .badge.role-admin {
   background-color: #e3f2fd;
-  color: #1976d2;
+  color: #000000 !important;
 }
 
 .badge.role-worker {
   background-color: #f3e5f5;
-  color: #7b1fa2;
+  color: #000000 !important;
 }
 
 .badge.status-active {
@@ -59,6 +59,14 @@
 .actions-cell {
   display: flex;
   gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 56px;
+}
+
+.users-table td.actions-cell {
+  padding: 16px 15px;
+  vertical-align: middle;
 }
 
 .btn-edit,
@@ -95,6 +103,48 @@
 }
 
 .btn-toggle.btn-success:hover {
+  background-color: #388e3c;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background-color: transparent;
+}
+
+.btn-icon.btn-edit {
+  background-color: #2196f3;
+  color: white;
+}
+
+.btn-icon.btn-edit:hover {
+  background-color: #1976d2;
+}
+
+.btn-icon.btn-danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-icon.btn-danger:hover {
+  background-color: #d32f2f;
+}
+
+.btn-icon.btn-success {
+  background-color: #4caf50;
+  color: white;
+}
+
+.btn-icon.btn-success:hover {
   background-color: #388e3c;
 }
 

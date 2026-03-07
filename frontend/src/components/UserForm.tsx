@@ -153,6 +153,10 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel, initialData, lo
     password: ''
   });
 
+  // Verificar si el usuario actual es administrador
+  const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+  const isAdmin = currentUser.role === 'admin';
+
   useEffect(() => {
     if (initialData) {
       setFormData({
@@ -160,11 +164,32 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel, initialData, lo
         email: initialData.email,
         dni: initialData.dni || '',
         username: initialData.username || '',
-        password: '', // No mostramos la contraseña al editar
+        password: isAdmin ? (initialData.password || '') : '', // Solo mostrar contraseña si es admin
         role: initialData.role
       });
     }
-  }, [initialData]);
+  }, [initialData, isAdmin]);
+
+  // Manejar clic fuera del modal
+  const handleOverlayClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (e.target === e.currentTarget) {
+      onCancel();
+    }
+  };
+
+  // Manejar tecla ESC
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onCancel();
+      }
+    };
+
+    document.addEventListener('keydown', handleEsc);
+    return () => {
+      document.removeEventListener('keydown', handleEsc);
+    };
+  }, [onCancel]);
 
   const handleDniChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -256,7 +281,7 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel, initialData, lo
   };
 
   return (
-    <div className="user-form-overlay">
+    <div className="user-form-overlay" onClick={handleOverlayClick}>
       <div className="user-form-modal">
         <h3>{initialData ? 'Editar Usuario' : 'Nuevo Usuario'}</h3>
         
@@ -301,6 +326,36 @@ const UserForm: React.FC<UserFormProps> = ({ onSubmit, onCancel, initialData, lo
               <small className="form-hint">Introduzca 8 números + 1 letra. Las credenciales se generarán al guardar.</small>
             )}
           </div>
+
+          {initialData && (
+            <>
+              <div className="form-group">
+                <label htmlFor="username">Usuario</label>
+                <input
+                  type="text"
+                  id="username"
+                  name="username"
+                  value={formData.username}
+                  readOnly
+                  className="readonly-input"
+                />
+              </div>
+
+              {isAdmin && (
+                <div className="form-group">
+                  <label htmlFor="password">Contraseña</label>
+                  <input
+                    type="text"
+                    id="password"
+                    name="password"
+                    value={formData.password || ''}
+                    readOnly
+                    className="readonly-input"
+                  />
+                </div>
+              )}
+            </>
+          )}
 
           <div className="form-group">
             <label htmlFor="role">Rol</label>

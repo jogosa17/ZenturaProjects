@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import UserService, { User } from '../services/user.service';
 import './UsersTable.css';
 
@@ -14,18 +15,17 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
 
   const fetchUsers = async () => {
     try {
-      const result = await UserService.getWorkers();
-      if (result && Array.isArray(result)) {
-        setUsers(result);
-      } else if (result && result.data && Array.isArray(result.data)) {
-        // Handle case where API might return { success: true, data: [...] }
-        setUsers(result.data);
-      } else {
-        setUsers([]);
-      }
-    } catch (err) {
-      setError('Error al cargar usuarios');
-      console.error(err);
+      setLoading(true);
+      console.log('🔍 Iniciando carga de usuarios...');
+      const users = await UserService.getWorkers();
+      console.log('✅ Usuarios cargados:', users);
+      setUsers(users || []);
+    } catch (err: any) {
+      console.error('❌ Error al cargar usuarios:', err);
+      console.error('   Mensaje:', err.message);
+      console.error('   Respuesta:', err.response?.data);
+      console.error('   Status:', err.response?.status);
+      setError('Error al cargar usuarios: ' + (err.message || 'Desconocido'));
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
 
   return (
     <div className="users-table-container">
-      <h2>Lista de Trabajadores</h2>
+      <h2>Lista de Usuarios</h2>
       <table className="users-table">
         <thead>
           <tr>
@@ -85,7 +85,10 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
                 <td>{user.dni || '-'}</td>
                 <td><strong>{user.username || '-'}</strong></td>
                 <td>
-                  <span className={`badge role-${user.role}`}>
+                  <span 
+                    className={`badge role-${user.role}`}
+                    style={{ color: '#000000 !important' }}
+                  >
                     {user.role === 'admin' ? 'Administrador' : 'Trabajador'}
                   </span>
                 </td>
@@ -106,19 +109,23 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
                   </span>
                 </td>
                 <td>{new Date(user.created_at || '').toLocaleDateString()}</td>
-                <td className="actions-cell">
-                  <button 
-                    onClick={() => onEdit(user)}
-                    className="btn-edit"
-                  >
-                    Editar
-                  </button>
-                  <button 
-                    onClick={() => handleToggleStatus(user)}
-                    className={`btn-toggle ${user.status === 1 ? 'btn-danger' : 'btn-success'}`}
-                  >
-                    {user.status === 1 ? 'Desactivar' : 'Activar'}
-                  </button>
+                <td>
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button 
+                      onClick={() => onEdit(user)}
+                      className="btn-icon btn-edit"
+                      title="Editar"
+                    >
+                      <Pencil size={18} />
+                    </button>
+                    <button 
+                      onClick={() => handleToggleStatus(user)}
+                      className={`btn-icon btn-delete ${user.status === 1 ? 'btn-danger' : 'btn-success'}`}
+                      title={user.status === 1 ? 'Desactivar' : 'Activar'}
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))

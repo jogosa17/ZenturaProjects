@@ -15,6 +15,7 @@
     "@types/react-router-dom": "^5.3.3",
     "axios": "^1.13.6",
     "expo-status-bar": "^55.0.4",
+    "lucide-react": "^0.577.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-native-web": "^0.21.2",

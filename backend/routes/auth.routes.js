@@ -76,6 +76,7 @@ router.post('/login', async (req, res) => {
           id: user.id,
           name: user.name,
           email: user.email,
+          username: user.username,
           role: user.role
         }
       }
@@ -109,7 +110,7 @@ router.get('/validate', async (req, res) => {
 
     // Obtener datos actualizados del usuario
     const [users] = await pool.execute(
-      'SELECT id, name, email, role, status FROM users WHERE id = ?',
+      'SELECT id, name, email, username, role, status FROM users WHERE id = ?',
       [decoded.id]
     );
 
@@ -137,6 +138,7 @@ router.get('/validate', async (req, res) => {
           id: user.id,
           name: user.name,
           email: user.email,
+          username: user.username,
           role: user.role
         }
       }

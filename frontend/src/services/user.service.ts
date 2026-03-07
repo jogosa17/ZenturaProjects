@@ -10,6 +10,7 @@ export interface User {
   projects?: string;
   dni?: string;
   username?: string;
+  password?: string;
 }
 
 export interface CreateUserDto {
@@ -25,8 +26,10 @@ export interface CreateUserDto {
 const UserService = {
   // Obtener todos los trabajadores
   getWorkers: async () => {
+    console.log('🔍 UserService: Llamando a /users/workers...');
     const response = await api.get<{ success: boolean; data: User[] }>('/users/workers');
-    return response.data;
+    console.log('🔍 UserService: Respuesta:', response.data);
+    return response.data.data || []; // Devolver solo el array de usuarios
   },
 
   // Crear un nuevo trabajador
