@@ -146,9 +146,9 @@ const updateTask = async (req, res) => {
     if (status !== undefined && status !== task.status) {
       let statusText = '';
       switch(status) {
-        case 'pending': statusText = 'Pendiente'; break;
-        case 'in_progress': statusText = 'En curso'; break;
-        case 'finished': statusText = 'Finalizada'; break;
+        case 0: statusText = 'Pendiente'; break;
+        case 1: statusText = 'En curso'; break;
+        case 2: statusText = 'Finalizada'; break;
       }
       
       await createNotification({

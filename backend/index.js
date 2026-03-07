@@ -14,6 +14,9 @@ const fileRoutes = require('./routes/files.routes');
 const noteRoutes = require('./routes/notes.routes');
 const consultaRoutes = require('./routes/consultas.routes');
 const notificationRoutes = require('./routes/notifications.routes');
+const agendaRoutes = require('./routes/agenda.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
+const searchRoutes = require('./routes/search.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -38,6 +41,9 @@ app.use('/api/files', fileRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/consultas', consultaRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.use('/api/agenda', agendaRoutes);
+app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/search', searchRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {

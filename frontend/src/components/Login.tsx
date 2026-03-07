@@ -18,7 +18,7 @@ interface LoginResponse {
 
 const Login: React.FC = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [loading, setLoading] = useState(false);
@@ -31,10 +31,23 @@ const Login: React.FC = () => {
     });
   };
 
+  const validateUsername = (username: string): boolean => {
+    // Validar formato: 1 letra + 4 números (ej: A1234)
+    const regex = /^[A-Za-z]\d{4}$/;
+    return regex.test(username);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+
+    // Validar formato del usuario
+    if (!validateUsername(formData.username)) {
+      setError('El usuario debe tener 1 letra seguida de 4 números (ej: A1234)');
+      setLoading(false);
+      return;
+    }
 
     try {
       const response = await axios.post<LoginResponse>('http://localhost:3001/api/auth/login', formData);
@@ -64,16 +77,20 @@ const Login: React.FC = () => {
         
         <form onSubmit={handleSubmit} className="login-form">
           <div className="form-group">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="username">Usuario</label>
             <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
               onChange={handleChange}
               required
-              placeholder="correo@ejemplo.com"
+              placeholder="A1234"
+              maxLength={5}
+              pattern="[A-Za-z]\d{4}"
+              title="1 letra seguida de 4 números (ej: A1234)"
             />
+            <small className="form-hint">Formato: 1 letra + 4 números (ej: W8429)</small>
           </div>
           
           <div className="form-group">
@@ -85,7 +102,7 @@ const Login: React.FC = () => {
               value={formData.password}
               onChange={handleChange}
               required
-              placeholder="••••••••"
+              placeholder="••••"
             />
           </div>
           
@@ -101,7 +118,7 @@ const Login: React.FC = () => {
         </form>
         
         <div className="login-footer">
-          <p>Usuario de prueba: admin@zentura.com / admin123</p>
+          <p>2026 ZENTURA PROJECTS</p>
         </div>
       </div>
     </div>

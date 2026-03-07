@@ -4,7 +4,7 @@ const { hashPassword } = require('../utils/auth.utils');
 // Crear un nuevo trabajador
 const createWorker = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, dni, username } = req.body;
 
     // Validaciones básicas
     if (!name || !email || !password) {
@@ -14,7 +14,7 @@ const createWorker = async (req, res) => {
       });
     }
 
-    // Verificar si el usuario ya existe
+    // Verificar si el usuario ya existe por email
     const [existingUsers] = await pool.execute(
       'SELECT id FROM users WHERE email = ?',
       [email]
@@ -27,13 +27,28 @@ const createWorker = async (req, res) => {
       });
     }
 
+    // Verificar si el username ya existe (si se proporciona)
+    if (username) {
+      const [existingUsernames] = await pool.execute(
+        'SELECT id FROM users WHERE username = ?',
+        [username]
+      );
+
+      if (existingUsernames.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'El usuario ya está registrado'
+        });
+      }
+    }
+
     // Hashear contraseña
     const hashedPassword = await hashPassword(password);
 
-    // Insertar usuario
+    // Insertar usuario con los nuevos campos
     const [result] = await pool.execute(
-      'INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, 'worker', 1]
+      'INSERT INTO users (name, email, password, role, status, dni, username) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, 'worker', 1, dni || null, username || null]
     );
 
     res.status(201).json({
@@ -44,7 +59,9 @@ const createWorker = async (req, res) => {
         name,
         email,
         role: 'worker',
-        status: 1
+        status: 1,
+        dni: dni || null,
+        username: username || null
       }
     });
   } catch (error) {
@@ -59,7 +76,7 @@ const createWorker = async (req, res) => {
 // Crear un nuevo administrador
 const createAdmin = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, dni, username } = req.body;
 
     if (!name || !email || !password) {
       return res.status(400).json({
@@ -68,6 +85,7 @@ const createAdmin = async (req, res) => {
       });
     }
 
+    // Verificar si el usuario ya existe por email
     const [existingUsers] = await pool.execute(
       'SELECT id FROM users WHERE email = ?',
       [email]
@@ -80,11 +98,27 @@ const createAdmin = async (req, res) => {
       });
     }
 
+    // Verificar si el username ya existe (si se proporciona)
+    if (username) {
+      const [existingUsernames] = await pool.execute(
+        'SELECT id FROM users WHERE username = ?',
+        [username]
+      );
+
+      if (existingUsernames.length > 0) {
+        return res.status(409).json({
+          success: false,
+          message: 'El usuario ya está registrado'
+        });
+      }
+    }
+
     const hashedPassword = await hashPassword(password);
 
+    // Insertar administrador con los nuevos campos
     const [result] = await pool.execute(
-      'INSERT INTO users (name, email, password, role, status) VALUES (?, ?, ?, ?, ?)',
-      [name, email, hashedPassword, 'admin', 1]
+      'INSERT INTO users (name, email, password, role, status, dni, username) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      [name, email, hashedPassword, 'admin', 1, dni || null, username || null]
     );
 
     res.status(201).json({
@@ -95,7 +129,9 @@ const createAdmin = async (req, res) => {
         name,
         email,
         role: 'admin',
-        status: 1
+        status: 1,
+        dni: dni || null,
+        username: username || null
       }
     });
   } catch (error) {
@@ -207,7 +243,7 @@ const getWorkers = async (req, res) => {
   try {
     const [workers] = await pool.execute(`
       SELECT 
-        u.id, u.name, u.email, u.status, u.created_at,
+        u.id, u.name, u.email, u.dni, u.username, u.status, u.created_at,
         GROUP_CONCAT(p.name SEPARATOR ', ') as projects
       FROM users u
       LEFT JOIN project_workers pw ON u.id = pw.user_id

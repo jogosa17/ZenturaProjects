@@ -23,18 +23,23 @@ const UsersPage: React.FC = () => {
     try {
       if (editingUser) {
         await UserService.updateUser(editingUser.id, data);
+        // Solo cerrar el formulario inmediatamente al editar
+        setShowForm(false);
+        setRefreshKey(prev => prev + 1);
       } else {
         if (data.role === 'admin') {
           await UserService.createAdmin(data);
         } else {
           await UserService.createWorker(data);
         }
+        // Al crear nuevo usuario, NO cerrar el formulario aquí
+        // El formulario se cerrará desde el modal de credenciales
+        setRefreshKey(prev => prev + 1); // Forzar recarga de la tabla
       }
-      setShowForm(false);
-      setRefreshKey(prev => prev + 1); // Forzar recarga de la tabla
     } catch (error) {
       console.error('Error al guardar usuario:', error);
-      alert('Error al guardar el usuario');
+      // Re-lanzar el error para que UserForm lo maneje
+      throw error;
     }
   };
 

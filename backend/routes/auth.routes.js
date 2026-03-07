@@ -6,20 +6,20 @@ const { verifyPassword, generateToken } = require('../utils/auth.utils');
 // Endpoint de login
 router.post('/login', async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { username, password } = req.body;
 
-    // Validar que se proporcionen email y password
-    if (!email || !password) {
+    // Validar que se proporcionen username y password
+    if (!username || !password) {
       return res.status(400).json({
         success: false,
-        message: 'El email y la contraseña son obligatorios'
+        message: 'El usuario y la contraseña son obligatorios'
       });
     }
 
-    // Buscar usuario en la base de datos
+    // Buscar usuario SOLO por username (no por email)
     const [users] = await pool.execute(
-      'SELECT id, name, email, password, role, status FROM users WHERE email = ?',
-      [email]
+      'SELECT id, name, email, username, password, role, status FROM users WHERE username = ?',
+      [username]
     );
 
     if (users.length === 0) {
@@ -31,8 +31,18 @@ router.post('/login', async (req, res) => {
 
     const user = users[0];
 
+    // Logs de depuración
+    console.log('🔍 Debug login - Usuario:', {
+      id: user.id,
+      username: username,
+      status: user.status,
+      statusType: typeof user.status,
+      statusCheck: user.status !== 1
+    });
+
     // Verificar si el usuario está activo
-    if (user.status !== 'active') {
+    if (user.status !== 1) {
+      console.log('❌ Usuario inactivo');
       return res.status(401).json({
         success: false,
         message: 'Usuario inactivo. Contacte al administrador.'

@@ -24,6 +24,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     { path: '/users', label: 'Usuarios', icon: '👥', roles: ['admin'] },
     { path: '/clients', label: 'Clientes', icon: '🏢', roles: ['admin', 'worker'] },
     { path: '/projects', label: 'Proyectos', icon: '📁', roles: ['admin', 'worker'] },
+    { path: '/agenda', label: 'Agenda', icon: '📅', roles: ['admin', 'worker'] },
+    { path: '/search', label: 'Buscar', icon: '🔍', roles: ['admin', 'worker'] },
   ];
 
   return (

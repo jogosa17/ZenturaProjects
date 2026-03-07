@@ -4,9 +4,10 @@ import './UsersTable.css';
 
 interface UsersTableProps {
   onEdit: (user: User) => void;
+  refreshKey?: number;
 }
 
-const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
+const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -32,7 +33,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
 
   const handleToggleStatus = async (user: User) => {
     try {
-      const newStatus = user.status === 'active' ? 'inactive' : 'active';
+      const newStatus = user.status === 1 ? 0 : 1;
       await UserService.toggleStatus(user.id, newStatus);
       
       // Actualizar estado localmente
@@ -47,7 +48,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [refreshKey]);
 
   if (loading) return <div>Cargando usuarios...</div>;
   if (error) return <div className="error-message">{error}</div>;
@@ -61,6 +62,8 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
             <th>ID</th>
             <th>Nombre</th>
             <th>Email</th>
+            <th>DNI</th>
+            <th>Usuario</th>
             <th>Rol</th>
             <th>Proyectos</th>
             <th>Estado</th>
@@ -71,7 +74,7 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
         <tbody>
           {users.length === 0 ? (
             <tr>
-              <td colSpan={8} className="text-center">No hay trabajadores registrados</td>
+              <td colSpan={10} className="text-center">No hay trabajadores registrados</td>
             </tr>
           ) : (
             users.map((user) => (
@@ -79,6 +82,8 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit }) => {
                 <td>{user.id}</td>
                 <td>{user.name}</td>
                 <td>{user.email}</td>
+                <td>{user.dni || '-'}</td>
+                <td><strong>{user.username || '-'}</strong></td>
                 <td>
                   <span className={`badge role-${user.role}`}>
                     {user.role === 'admin' ? 'Administrador' : 'Trabajador'}

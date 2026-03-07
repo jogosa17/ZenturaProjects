@@ -6,6 +6,8 @@ import UsersPage from './pages/UsersPage';
 import ClientsPage from './pages/ClientsPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
+import AgendaPage from './pages/AgendaPage';
+import SearchPage from './pages/SearchPage';
 import Layout from './components/layout/Layout';
 import './App.css';
 
@@ -63,6 +65,18 @@ function App() {
           <Route path="/projects/:id" element={
             <ProtectedRoute>
               <ProjectDetailsPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/agenda" element={
+            <ProtectedRoute>
+              <AgendaPage />
+            </ProtectedRoute>
+          } />
+          
+          <Route path="/search" element={
+            <ProtectedRoute>
+              <SearchPage />
             </ProtectedRoute>
           } />
           

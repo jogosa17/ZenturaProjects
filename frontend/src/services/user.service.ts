@@ -8,11 +8,15 @@ export interface User {
   status: 0 | 1; // 0: inactive, 1: active
   created_at?: string;
   projects?: string;
+  dni?: string;
+  username?: string;
 }
 
 export interface CreateUserDto {
   name: string;
   email: string;
+  dni?: string;
+  username?: string;
   password?: string;
   role?: 'admin' | 'worker';
   status?: 0 | 1;
@@ -49,8 +53,8 @@ const UserService = {
     return response.data;
   },
 
-  // Cambiar estado de usuario01
-  toggleStatus: async (id: number, status: 'active' | 'inactive') => {
+  // Cambiar estado de usuario
+  toggleStatus: async (id: number, status: 0 | 1) => {
     const response = await api.patch<{ success: boolean; message: string }>(`/users/${id}/status`, { status });
     return response.data;
   }

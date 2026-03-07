@@ -176,38 +176,38 @@ Cada tarea puede marcarse como completada usando los **checkboxes**.
 * [x] Notificación al finalizar tarea
 * [x] Notificación al subir archivos
 * [x] Notificación en chat
-* [ ] Notificaciones de fechas de proyecto (Requiere cron job o check periódico)
+* [x] Notificaciones de fechas de proyecto (Requiere cron job o check periódico)
 * [x] Crear panel de notificaciones
 
 ---
 
 # Fase 15 — Agenda
 
-* [ ] Crear vista de agenda
-* [ ] Mostrar fechas de inicio de proyectos
-* [ ] Mostrar fechas de fin de proyectos
-* [ ] Abrir proyecto desde agenda
+* [x] Crear vista de agenda
+* [x] Mostrar fechas de inicio de proyectos
+* [x] Mostrar fechas de fin de proyectos
+* [x] Abrir proyecto desde agenda
 
 ---
 
 # Fase 16 — Dashboard
 
-* [ ] Crear dashboard administrativo
-* [ ] Mostrar estadísticas
-* [ ] Mostrar actividad reciente
-* [ ] Mostrar últimas notificaciones
+* [x] Crear dashboard administrativo
+* [x] Mostrar estadísticas
+* [x] Mostrar actividad reciente
+* [x] Mostrar últimas notificaciones
 
 ---
 
 # Fase 17 — Buscador global
 
-* [ ] Crear API de búsqueda
-* [ ] Buscar proyectos
-* [ ] Buscar tareas
-* [ ] Buscar clientes
-* [ ] Buscar archivos
-* [ ] Buscar zonas
-* [ ] Crear interfaz de buscador
+* [x] Crear API de búsqueda
+* [x] Buscar proyectos
+* [x] Buscar tareas
+* [x] Buscar clientes
+* [x] Buscar archivos
+* [x] Buscar zonas
+* [x] Crear interfaz de buscador
 
 ---
 
