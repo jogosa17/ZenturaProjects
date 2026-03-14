@@ -291,7 +291,7 @@ const SearchPage: React.FC = () => {
         <div className="search-filters">
           <select value={searchType} onChange={(e) => setSearchType(e.target.value)} className="search-filter">
             <option value="all">Todos</option>
-            <option value="projects">Proyectos</option>
+            <option value="Projects">Proyectos</option>
             <option value="tasks">Tareas</option>
             <option value="clients">Clientes</option>
             <option value="zones">Zonas</option>

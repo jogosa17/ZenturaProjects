@@ -4,6 +4,7 @@ export interface Client {
   id: number;
   name: string;
   phone: string;
+  dni_cif?: string;
   created_at?: string;
   project_count?: number;
   projects?: any[]; // Podríamos definir una interfaz Project más adelante
@@ -12,6 +13,7 @@ export interface Client {
 export interface CreateClientDto {
   name: string;
   phone: string;
+  dni_cif?: string;
 }
 
 const ClientService = {

@@ -8,7 +8,7 @@ import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailsPage from './pages/ProjectDetailsPage';
 import AgendaPage from './pages/AgendaPage';
 import SearchPage from './pages/SearchPage';
-import Layout from './components/layout/Layout';
+import MobileLayout from './components/MobileLayout';
 import './App.css';
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
@@ -16,7 +16,7 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   if (!token) {
     return <Navigate to="/" replace />;
   }
-  return <Layout>{children}</Layout>;
+  return <MobileLayout>{children}</MobileLayout>;
 };
 
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {

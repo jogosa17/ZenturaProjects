@@ -32,7 +32,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="layout">
       <aside className="sidebar">
         <div className="sidebar-header">
-          <h2>Zentura</h2>
+          <h2>Zentura Projects</h2>
         </div>
         
         <nav className="sidebar-nav">

@@ -17,6 +17,8 @@ const notificationRoutes = require('./routes/notifications.routes');
 const agendaRoutes = require('./routes/agenda.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 const searchRoutes = require('./routes/search.routes');
+const chatRoutes = require('./routes/chat.routes');
+const assignmentRoutes = require('./routes/assignments.routes');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -44,6 +46,8 @@ app.use('/api/notifications', notificationRoutes);
 app.use('/api/agenda', agendaRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/search', searchRoutes);
+app.use('/api/chat', chatRoutes);
+app.use('/api/assignments', assignmentRoutes);
 
 // Ruta básica de prueba
 app.get('/', (req, res) => {

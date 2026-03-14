@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import ClientsTable from '../components/ClientsTable';
 import ClientForm from '../components/ClientForm';
+import ClientProjectsModal from '../components/ClientProjectsModal';
 import ClientService, { Client, CreateClientDto } from '../services/client.service';
-import './ClientsPage.css';
+import ProjectService, { Project } from '../services/project.service';
 
 const ClientsPage: React.FC = () => {
   const [clients, setClients] = useState<Client[]>([]);
@@ -10,6 +11,10 @@ const ClientsPage: React.FC = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingClient, setEditingClient] = useState<Client | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showProjectsModal, setShowProjectsModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [clientProjects, setClientProjects] = useState<Project[]>([]);
+  const [projectsLoading, setProjectsLoading] = useState(false);
 
   const fetchClients = async () => {
     setLoading(true);
@@ -52,23 +57,62 @@ const ClientsPage: React.FC = () => {
     }
   };
 
+  const handleViewProjects = async (client: Client) => {
+    setSelectedClient(client);
+    setShowProjectsModal(true);
+    setProjectsLoading(true);
+    
+    try {
+      const result = await ProjectService.getProjectsByClient(client.id);
+      if (result.success) {
+        setClientProjects(result.data);
+      }
+    } catch (err) {
+      console.error('Error al cargar proyectos del cliente:', err);
+      alert('Error al cargar los proyectos del cliente');
+    } finally {
+      setProjectsLoading(false);
+    }
+  };
+
   const handleFormSubmit = async (data: CreateClientDto) => {
     try {
+      console.log('🔍 Guardando datos del cliente:', data);
+      
       if (editingClient) {
-        await ClientService.updateClient(editingClient.id, data);
+        console.log('📝 Actualizando cliente existente:', editingClient.id);
+        const result = await ClientService.updateClient(editingClient.id, data);
+        if (result.success) {
+          console.log('✅ Cliente actualizado correctamente');
+          setShowForm(false);
+          setEditingClient(null);
+          // Recargar la lista de clientes para reflejar los cambios
+          await fetchClients();
+        } else {
+          console.error('❌ Error al actualizar cliente:', result.message);
+          alert('Error al actualizar el cliente: ' + result.message);
+        }
       } else {
-        await ClientService.createClient(data);
+        console.log('📝 Creando nuevo cliente');
+        const result = await ClientService.createClient(data);
+        if (result.success) {
+          console.log('✅ Cliente creado correctamente');
+          setShowForm(false);
+          // Recargar la lista para mostrar el nuevo cliente
+          await fetchClients();
+        } else {
+          console.error('❌ Error al crear cliente:', result.message);
+          alert('Error al crear el cliente: ' + result.message);
+        }
       }
-      setShowForm(false);
-      fetchClients();
     } catch (error) {
-      console.error('Error al guardar cliente:', error);
+      console.error('❌ Error en handleFormSubmit:', error);
       alert('Error al guardar el cliente');
     }
   };
 
   return (
-    <div className="clients-page">
+    <>
       <div className="page-header">
         <h1>Gestión de Clientes</h1>
         <button className="btn-create" onClick={handleCreateClient}>
@@ -83,6 +127,7 @@ const ClientsPage: React.FC = () => {
         loading={loading}
         onEdit={handleEditClient} 
         onDelete={handleDeleteClient}
+        onViewProjects={handleViewProjects}
       />
 
       {showForm && (
@@ -92,7 +137,21 @@ const ClientsPage: React.FC = () => {
           onCancel={() => setShowForm(false)}
         />
       )}
-    </div>
+
+      {showProjectsModal && (
+        <ClientProjectsModal
+          isOpen={showProjectsModal}
+          onClose={() => {
+            setShowProjectsModal(false);
+            setSelectedClient(null);
+            setClientProjects([]);
+          }}
+          client={selectedClient}
+          projects={clientProjects}
+          loading={projectsLoading}
+        />
+      )}
+    </>
   );
 };
 

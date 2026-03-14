@@ -241,10 +241,14 @@ const toggleUserStatus = async (req, res) => {
 // Listar trabajadores
 const getWorkers = async (req, res) => {
   try {
-    // Consulta simplificada sin joins complejos
+    // Consulta que incluye los proyectos asociados
     const [workers] = await pool.execute(`
       SELECT 
-        u.id, u.name, u.email, u.dni, u.username, u.status, u.created_at
+        u.id, u.name, u.email, u.dni, u.username, u.status, u.created_at,
+        (SELECT GROUP_CONCAT(p.name SEPARATOR ', ')
+         FROM project_workers pw
+         JOIN projects p ON pw.project_id = p.id
+         WHERE pw.worker_id = u.id) as projects
       FROM users u
       WHERE u.role = 'worker'
       ORDER BY u.name ASC

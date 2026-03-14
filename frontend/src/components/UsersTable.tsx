@@ -54,9 +54,8 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
   if (error) return <div className="error-message">{error}</div>;
 
   return (
-    <div className="users-table-container">
-      <h2>Lista de Usuarios</h2>
-      <table className="users-table">
+    <div className="projects-table-container">
+      <table className="projects-table" style={{ minWidth: '700px' }}>
         <thead>
           <tr>
             <th>ID</th>
@@ -85,45 +84,42 @@ const UsersTable: React.FC<UsersTableProps> = ({ onEdit, refreshKey = 0 }) => {
                 <td>{user.dni || '-'}</td>
                 <td><strong>{user.username || '-'}</strong></td>
                 <td>
-                  <span 
-                    className={`badge role-${user.role}`}
-                    style={{ color: '#000000 !important' }}
-                  >
+                  <span className={`badge ${user.role === 'admin' ? 'priority-high' : 'priority-low'}`}>
                     {user.role === 'admin' ? 'Administrador' : 'Trabajador'}
                   </span>
                 </td>
                 <td>
                   {user.projects ? (
-                    <span className="projects-list" title={user.projects}>
+                    <span style={{ color: '#6b7280' }} title={user.projects}>
                       {user.projects.length > 30 
                         ? user.projects.substring(0, 30) + '...' 
                         : user.projects}
                     </span>
                   ) : (
-                    <span className="text-muted">-</span>
+                    <span style={{ color: '#9ca3af' }}>-</span>
                   )}
                 </td>
                 <td>
-                  <span className={`badge status-${user.status === 1 ? 'active' : 'inactive'}`}>
+                  <span className={`badge ${user.status === 1 ? 'status-finished' : 'status-cancelled'}`}>
                     {user.status === 1 ? 'Activo' : 'Inactivo'}
                   </span>
                 </td>
                 <td>{new Date(user.created_at || '').toLocaleDateString()}</td>
                 <td>
-                  <div style={{ display: 'flex', gap: '8px' }}>
+                  <div className="actions-cell">
                     <button 
                       onClick={() => onEdit(user)}
-                      className="btn-icon btn-edit"
+                      className="btn-edit"
                       title="Editar"
                     >
-                      <Pencil size={18} />
+                      <Pencil size={16} />
                     </button>
                     <button 
                       onClick={() => handleToggleStatus(user)}
-                      className={`btn-icon btn-delete ${user.status === 1 ? 'btn-danger' : 'btn-success'}`}
-                      title={user.status === 1 ? 'Desactivar' : 'Activar'}
+                      className={user.status === 1 ? 'btn-view' : 'btn-delete'}
+                      title={user.status === 1 ? "Desactivar usuario" : "Activar usuario"}
                     >
-                      <Trash2 size={18} />
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </td>

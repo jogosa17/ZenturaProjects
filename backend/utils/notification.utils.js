@@ -1,6 +1,40 @@
 const { pool } = require('../config/database');
 
 /**
+ * Envía un mensaje automático al chat del proyecto cuando hay cambios en tareas o notas
+ * @param {number} projectId - ID del proyecto
+ * @param {string} message - Mensaje a enviar al chat
+ * @param {string} type - Tipo de mensaje (task_created, task_updated, note_created, etc.)
+ * @param {number} userId - ID del usuario que realiza la acción (para excluirlo de某些 notificaciones)
+ */
+const sendProjectChatMessage = async ({ projectId, message, type, userId }) => {
+  try {
+    // Obtener la sala de chat del proyecto
+    const [chatRoom] = await pool.execute(
+      'SELECT id FROM chat_rooms WHERE project_id = ? AND type = "project"',
+      [projectId]
+    );
+
+    if (chatRoom.length === 0) {
+      console.log(`No hay sala de chat para el proyecto ${projectId}`);
+      return;
+    }
+
+    const roomId = chatRoom[0].id;
+
+    // Insertar mensaje automático en el chat
+    await pool.execute(`
+      INSERT INTO chat_messages (room_id, user_id, message, message_type, created_at)
+      VALUES (?, ?, ?, 'system', NOW())
+    `, [roomId, userId, message]);
+
+    console.log(`Mensaje automático enviado al chat del proyecto ${projectId}: ${message}`);
+  } catch (error) {
+    console.error('Error al enviar mensaje automático al chat:', error);
+  }
+};
+
+/**
  * Crea una notificación para un usuario específico o un grupo de usuarios.
  * @param {Object} params - Parámetros de la notificación
  * @param {number} params.userId - ID del usuario que recibe la notificación (opcional si es para admin)
@@ -54,5 +88,6 @@ const createNotification = async ({ userId, projectId, type, message, toAdmin = 
 };
 
 module.exports = {
-  createNotification
+  createNotification,
+  sendProjectChatMessage
 };

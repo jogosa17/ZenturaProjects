@@ -3,7 +3,9 @@ const { pool } = require('../config/database');
 // Crear un nuevo cliente
 const createClient = async (req, res) => {
   try {
-    const { name, phone } = req.body;
+    const { name, phone, dni_cif } = req.body;
+
+    console.log('🔍 Backend recibiendo datos de creación:', { name, phone, dni_cif });
 
     if (!name || !phone) {
       return res.status(400).json({
@@ -13,8 +15,8 @@ const createClient = async (req, res) => {
     }
 
     const [result] = await pool.execute(
-      'INSERT INTO clients (name, phone) VALUES (?, ?)',
-      [name, phone]
+      'INSERT INTO clients (name, phone, dni_cif) VALUES (?, ?, ?)',
+      [name, phone, dni_cif || null]
     );
 
     res.status(201).json({
@@ -23,7 +25,8 @@ const createClient = async (req, res) => {
       data: {
         id: result.insertId,
         name,
-        phone
+        phone,
+        dni_cif
       }
     });
   } catch (error) {
@@ -64,26 +67,32 @@ const getClientById = async (req, res) => {
     const { id } = req.params;
 
     const [clients] = await pool.execute('SELECT * FROM clients WHERE id = ?', [id]);
-
+    
     if (clients.length === 0) {
       return res.status(404).json({
         success: false,
         message: 'Cliente no encontrado'
       });
     }
-
+    
     // Obtener proyectos del cliente
     const [projects] = await pool.execute(
       'SELECT * FROM projects WHERE client_id = ? ORDER BY created_at DESC',
       [id]
     );
-
+    
     const client = clients[0];
     client.projects = projects;
-
+    
     res.json({
       success: true,
-      data: client
+      data: {
+        id: client.id,
+        name: client.name,
+        phone: client.phone,
+        dni_cif: client.dni_cif,
+        projects: client.projects
+      }
     });
   } catch (error) {
     console.error('Error al obtener cliente:', error);
@@ -98,7 +107,9 @@ const getClientById = async (req, res) => {
 const updateClient = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, phone } = req.body;
+    const { name, phone, dni_cif } = req.body;
+
+    console.log('🔍 Backend recibiendo datos de actualización:', { id, name, phone, dni_cif });
 
     if (!name || !phone) {
       return res.status(400).json({
@@ -108,9 +119,11 @@ const updateClient = async (req, res) => {
     }
 
     const [result] = await pool.execute(
-      'UPDATE clients SET name = ?, phone = ? WHERE id = ?',
-      [name, phone, id]
+      'UPDATE clients SET name = ?, phone = ?, dni_cif = ? WHERE id = ?',
+      [name, phone, dni_cif || null, id]
     );
+
+    console.log('🔍 Resultado de la actualización:', { affectedRows: result.affectedRows });
 
     if (result.affectedRows === 0) {
       return res.status(404).json({
@@ -122,7 +135,12 @@ const updateClient = async (req, res) => {
     res.json({
       success: true,
       message: 'Cliente actualizado exitosamente',
-      data: { id, name, phone }
+      data: {
+        id: parseInt(id),
+        name,
+        phone,
+        dni_cif
+      }
     });
   } catch (error) {
     console.error('Error al actualizar cliente:', error);

@@ -12,14 +12,16 @@ interface ClientFormProps {
 const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, onCancel, initialData, loading = false }) => {
   const [formData, setFormData] = useState<CreateClientDto>({
     name: '',
-    phone: ''
+    phone: '',
+    dni_cif: ''
   });
 
   useEffect(() => {
     if (initialData) {
       setFormData({
         name: initialData.name,
-        phone: initialData.phone
+        phone: initialData.phone,
+        dni_cif: initialData.dni_cif || ''
       });
     }
   }, [initialData]);
@@ -34,7 +36,13 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, onCancel, initialData
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onSubmit(formData);
+    const data = {
+      name: formData.name,
+      phone: formData.phone,
+      ...(formData.dni_cif && { dni_cif: formData.dni_cif })
+    };
+    console.log('🔍 Enviando datos del cliente:', data);
+    await onSubmit(data);
   };
 
   return (
@@ -53,6 +61,19 @@ const ClientForm: React.FC<ClientFormProps> = ({ onSubmit, onCancel, initialData
               onChange={handleChange}
               placeholder="Nombre del cliente o empresa"
               required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="dni_cif">DNI</label>
+            <input
+              type="text"
+              id="dni_cif"
+              name="dni_cif"
+              value={formData.dni_cif}
+              onChange={handleChange}
+              placeholder="Ej: 12345678A"
+              maxLength={30}
             />
           </div>
 

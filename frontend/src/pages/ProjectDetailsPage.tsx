@@ -4,6 +4,7 @@ import ProjectService, { Project } from '../services/project.service';
 import ZonesManager from '../components/ZonesManager';
 import FilesManager from '../components/FilesManager';
 import ChatManager from '../components/ChatManager';
+import WorkerAssignment from '../components/WorkerAssignment';
 import './ProjectDetailsPage.css';
 
 const ProjectDetailsPage: React.FC = () => {
@@ -13,6 +14,7 @@ const ProjectDetailsPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [uploadingDoc, setUploadingDoc] = useState<'budget' | 'invoice' | null>(null);
+  const [user, setUser] = useState<any>(null);
   const budgetInputRef = React.useRef<HTMLInputElement>(null);
   const invoiceInputRef = React.useRef<HTMLInputElement>(null);
   const API_URL = 'http://localhost:3001';
@@ -37,6 +39,16 @@ const ProjectDetailsPage: React.FC = () => {
 
   useEffect(() => {
     fetchProject();
+    // Cargar usuario desde localStorage
+    const userStr = localStorage.getItem('user');
+    if (userStr && userStr !== 'null' && userStr !== 'undefined') {
+      try {
+        const userData = JSON.parse(userStr);
+        setUser(userData);
+      } catch (error) {
+        console.error('Error parseando usuario:', error);
+      }
+    }
   }, [id]);
 
   const handleFileUpload = async (type: 'budget' | 'invoice', e: React.ChangeEvent<HTMLInputElement>) => {
@@ -243,26 +255,13 @@ const ProjectDetailsPage: React.FC = () => {
 
         {/* Columna Derecha - Trabajadores y Estadísticas */}
         <div className="project-sidebar-column">
-          <div className="info-card">
-            <h3>Equipo Asignado</h3>
-            {project.workers && project.workers.length > 0 ? (
-              <ul className="workers-list">
-                {project.workers.map((worker: any) => (
-                  <li key={worker.id} className="worker-item">
-                    <span className="worker-avatar">
-                      {worker.name.charAt(0).toUpperCase()}
-                    </span>
-                    <div className="worker-details">
-                      <span className="worker-name">{worker.name}</span>
-                      <span className="worker-role">{worker.role === 'admin' ? 'Admin' : 'Trabajador'}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="no-data">No hay trabajadores asignados</p>
-            )}
-          </div>
+          {/* Componente de asignación de trabajadores - solo para admins */}
+          <WorkerAssignment 
+            projectId={project.id} 
+            projectName={project.name} 
+            userRole={user?.role}
+            onAssignmentChange={fetchProject}
+          />
 
           <div className="info-card">
             <FilesManager projectId={project.id} title="Archivos del Proyecto" />

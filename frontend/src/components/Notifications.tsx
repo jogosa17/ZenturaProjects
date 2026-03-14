@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import NotificationService, { Notification } from '../services/notification.service';
 import './Notifications.css';
 
@@ -10,6 +11,7 @@ const NotificationsPanel: React.FC<{
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const fetchNotifications = async () => {
     setLoading(true);
@@ -46,6 +48,31 @@ const NotificationsPanel: React.FC<{
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isOpen, onClose]);
+
+  const handleNotificationClick = async (notification: Notification) => {
+    // Marcar como leída
+    await handleMarkAsRead(notification.id, notification.is_read);
+    
+    // Redirigir según el tipo de notificación
+    if (notification.task_id && notification.project_id) {
+      // Construir URL para ir al proyecto, zona y tarea específica
+      const projectUrl = `/projects/${notification.project_id}`;
+      
+      // Si hay zone_id, intentamos ir directamente a la tarea
+      if (notification.zone_id) {
+        const taskUrl = `${projectUrl}?zone=${notification.zone_id}&task=${notification.task_id}`;
+        navigate(taskUrl);
+      } else {
+        navigate(projectUrl);
+      }
+    } else if (notification.project_id) {
+      // Si solo hay project_id, ir al proyecto
+      navigate(`/projects/${notification.project_id}`);
+    }
+    
+    // Cerrar el panel de notificaciones
+    onClose();
+  };
 
   const handleMarkAsRead = async (id: number, isRead: boolean | number) => {
     if (isRead) return; // Ya leída
@@ -93,7 +120,8 @@ const NotificationsPanel: React.FC<{
             <div 
               key={notif.id} 
               className={`notification-item ${!notif.is_read ? 'unread' : ''}`}
-              onClick={() => handleMarkAsRead(notif.id, notif.is_read)}
+              onClick={() => handleNotificationClick(notif)}
+              style={{ cursor: 'pointer' }}
             >
               <div className="notif-content">
                 <p className="notif-message">{notif.message}</p>

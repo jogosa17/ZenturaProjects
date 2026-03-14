@@ -29,10 +29,10 @@ async function getDashboardStats(req, res) {
     const [tasksStats] = await pool.execute(`
       SELECT 
         COUNT(*) as total_tasks,
-        SUM(CASE WHEN status = 'in_progress' THEN 1 ELSE 0 END) as active_tasks,
-        SUM(CASE WHEN status = 'finished' THEN 1 ELSE 0 END) as completed_tasks,
-        SUM(CASE WHEN status = 'pending' THEN 1 ELSE 0 END) as pending_tasks,
-        SUM(price) as total_budget
+        SUM(CASE WHEN t.status = 'in_progress' THEN 1 ELSE 0 END) as active_tasks,
+        SUM(CASE WHEN t.status = 'finished' THEN 1 ELSE 0 END) as completed_tasks,
+        SUM(CASE WHEN t.status = 'pending' THEN 1 ELSE 0 END) as pending_tasks,
+        SUM(t.price) as total_budget
       FROM tasks t
       LEFT JOIN zones z ON t.zone_id = z.id
       LEFT JOIN projects p ON z.project_id = p.id
@@ -67,12 +67,11 @@ async function getDashboardStats(req, res) {
         t.status,
         t.updated_at as date,
         p.name as project_name,
-        u.name as user_name
+        'Sistema' as user_name
       FROM tasks t
       LEFT JOIN zones z ON t.zone_id = z.id
       LEFT JOIN projects p ON z.project_id = p.id
       LEFT JOIN project_workers pw ON p.id = pw.project_id
-      LEFT JOIN users u ON t.updated_by = u.id
       ${whereClause}
       
       UNION ALL
@@ -97,25 +96,25 @@ async function getDashboardStats(req, res) {
     // Proyectos por estado
     const [projectsByStatus] = await pool.execute(`
       SELECT 
-        status,
+        p.status,
         COUNT(*) as count
       FROM projects p
       LEFT JOIN project_workers pw ON p.id = pw.project_id
       ${whereClause}
-      GROUP BY status
+      GROUP BY p.status
     `, params);
 
     // Tareas por prioridad
     const [tasksByPriority] = await pool.execute(`
       SELECT 
-        priority,
+        t.priority,
         COUNT(*) as count
       FROM tasks t
       LEFT JOIN zones z ON t.zone_id = z.id
       LEFT JOIN projects p ON z.project_id = p.id
       LEFT JOIN project_workers pw ON p.id = pw.project_id
       ${whereClause}
-      GROUP BY priority
+      GROUP BY t.priority
     `, params);
 
     const stats = {
@@ -177,15 +176,14 @@ async function getRecentActivity(req, res) {
           'task' as activity_type,
           t.name as title,
           CONCAT('Tarea ', t.status, ' - ', p.name) as description,
-          t.status,
+          t.status as status,
           t.updated_at as created_at,
           p.name as project_name,
-          u.name as user_name
+          'Sistema' as user_name
         FROM tasks t
         LEFT JOIN zones z ON t.zone_id = z.id
         LEFT JOIN projects p ON z.project_id = p.id
         LEFT JOIN project_workers pw ON p.id = pw.project_id
-        LEFT JOIN users u ON t.updated_by = u.id
         ${whereClause}
         
         UNION ALL

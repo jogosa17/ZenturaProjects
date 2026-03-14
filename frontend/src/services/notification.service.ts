@@ -5,6 +5,8 @@ export interface Notification {
   user_id: number;
   project_id?: number;
   project_name?: string;
+  task_id?: number;  // ID de la tarea relacionada
+  zone_id?: number;  // ID de la zona relacionada
   type: string;
   message: string;
   is_read: number | boolean;

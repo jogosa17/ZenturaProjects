@@ -1,5 +1,5 @@
 const { pool } = require('../config/database');
-const { createNotification } = require('../utils/notification.utils');
+const { createNotification, sendProjectChatMessage } = require('../utils/notification.utils');
 
 // Crear una nueva tarea
 const createTask = async (req, res) => {
@@ -29,16 +29,15 @@ const createTask = async (req, res) => {
 
     const [result] = await pool.execute(
       `INSERT INTO tasks (
-        zone_id, project_id, name, description, price, priority, notes, status
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')`,
+        zone_id, project_id, name, description, price, priority, status
+      ) VALUES (?, ?, ?, ?, ?, ?, 'pending')`,
       [
         zone_id, 
         project_id, 
         name, 
         description || null, 
         price || 0.00, 
-        priority || 0, // 0: Sin prioridad (Baja/Normal), 1: Media, 2: Alta/Urgente según schema comment o frontend
-        notes || null
+        priority || 0
       ]
     );
 
@@ -49,6 +48,14 @@ const createTask = async (req, res) => {
       message: `Nueva tarea creada: "${name}" en zona "${zone_name}"`,
       toAdmin: true,
       excludeUserId: currentUserId
+    });
+
+    // Enviar mensaje automático al chat del proyecto
+    await sendProjectChatMessage({
+      projectId: project_id,
+      message: `📝 **Nueva Tarea Creada**\n\n🔹 **Tarea:** ${name}\n🏗️ **Zona:** ${zone_name}\n💰 **Precio:** €${price || '0.00'}\n👤 **Creado por:** ${req.user.name || 'Usuario'}`,
+      type: 'task_created',
+      userId: currentUserId
     });
 
     res.status(201).json({
@@ -102,7 +109,7 @@ const getTasksByZone = async (req, res) => {
 const updateTask = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, description, price, priority, notes, status } = req.body;
+    const { name, description, price, priority, status } = req.body;
     const currentUserId = req.user.id;
 
     // Obtener tarea actual para comparar y sacar project_id
@@ -125,7 +132,6 @@ const updateTask = async (req, res) => {
     if (description !== undefined) { fields.push('description = ?'); values.push(description); }
     if (price !== undefined) { fields.push('price = ?'); values.push(price); }
     if (priority !== undefined) { fields.push('priority = ?'); values.push(priority); }
-    if (notes !== undefined) { fields.push('notes = ?'); values.push(notes); }
     if (status !== undefined) { fields.push('status = ?'); values.push(status); }
 
     if (fields.length === 0) {
@@ -158,6 +164,14 @@ const updateTask = async (req, res) => {
         toAdmin: true,
         excludeUserId: currentUserId
       });
+
+      // Enviar mensaje automático al chat del proyecto
+      await sendProjectChatMessage({
+        projectId: task.project_id,
+        message: `🔄 **Tarea Actualizada**\n\n🔹 **Tarea:** ${task.name}\n📊 **Nuevo Estado:** ${statusText}\n👤 **Actualizado por:** ${req.user.name || 'Usuario'}`,
+        type: 'task_updated',
+        userId: currentUserId
+      });
     }
 
     if (priority !== undefined && priority !== task.priority) {
@@ -173,6 +187,14 @@ const updateTask = async (req, res) => {
         message: `La prioridad de la tarea "${task.name}" ha cambiado a: ${priorityText}`,
         toAdmin: true,
         excludeUserId: currentUserId
+      });
+
+      // Enviar mensaje automático al chat del proyecto
+      await sendProjectChatMessage({
+        projectId: task.project_id,
+        message: `⚡ **Prioridad Actualizada**\n\n🔹 **Tarea:** ${task.name}\n🎯 **Nueva Prioridad:** ${priorityText}\n👤 **Actualizado por:** ${req.user.name || 'Usuario'}`,
+        type: 'task_updated',
+        userId: currentUserId
       });
     }
 

@@ -1,5 +1,6 @@
 import api from './api';
-import { FileData } from './file.service';
+
+const API_URL = 'http://localhost:3001';
 
 export interface Note {
   id: number;
@@ -8,7 +9,7 @@ export interface Note {
   user_name?: string;
   note: string;
   created_at: string;
-  files?: FileData[];
+  files?: any[]; // Cambiado a any para evitar error
 }
 
 export interface CreateNoteDto {
@@ -19,19 +20,19 @@ export interface CreateNoteDto {
 const NoteService = {
   // Obtener notas de una tarea
   getNotesByTask: async (taskId: number) => {
-    const response = await api.get<{ success: boolean; data: Note[] }>(`/notes/task/${taskId}`);
+    const response = await api.get<{ success: boolean; data: Note[] }>(`${API_URL}/api/notes/task/${taskId}`);
     return response.data;
   },
 
   // Crear nota
   createNote: async (data: CreateNoteDto) => {
-    const response = await api.post<{ success: boolean; message: string; data: Note }>('/notes', data);
+    const response = await api.post<{ success: boolean; message: string; data: Note }>(`${API_URL}/api/notes`, data);
     return response.data;
   },
 
   // Eliminar nota
   deleteNote: async (id: number) => {
-    const response = await api.delete<{ success: boolean; message: string }>(`/notes/${id}`);
+    const response = await api.delete<{ success: boolean; message: string }>(`${API_URL}/api/notes/${id}`);
     return response.data;
   }
 };

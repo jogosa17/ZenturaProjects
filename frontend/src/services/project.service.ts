@@ -54,6 +54,12 @@ const ProjectService = {
     return response.data;
   },
 
+  // Obtener proyectos por cliente
+  getProjectsByClient: async (clientId: number) => {
+    const response = await api.get<{ success: boolean; data: Project[] }>(`/projects?client_id=${clientId}`);
+    return response.data;
+  },
+
   // Obtener proyecto por ID
   getProjectById: async (id: number) => {
     const response = await api.get<{ success: boolean; data: Project }>(`/projects/${id}`);

@@ -44,7 +44,7 @@ const UsersPage: React.FC = () => {
   };
 
   return (
-    <div className="users-page">
+    <>
       <div className="page-header">
         <h1>Gestión de Usuarios</h1>
         <button className="btn-create" onClick={handleCreateUser}>
@@ -53,8 +53,8 @@ const UsersPage: React.FC = () => {
       </div>
 
       <UsersTable 
-        key={refreshKey} 
-        onEdit={handleEditUser} 
+        onEdit={handleEditUser}
+        refreshKey={refreshKey}
       />
 
       {showForm && (
@@ -64,7 +64,7 @@ const UsersPage: React.FC = () => {
           onCancel={() => setShowForm(false)}
         />
       )}
-    </div>
+    </>
   );
 };
 

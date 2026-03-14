@@ -78,6 +78,24 @@
   background-color: #d32f2f;
 }
 
+.btn-delete:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.phone-link {
+  color: #2196f3;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.phone-link:hover {
+  text-decoration: underline;
+}
+
 .badge {
   padding: 4px 8px;
   border-radius: 12px;
